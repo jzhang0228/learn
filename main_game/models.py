@@ -8,3 +8,4 @@ class Lesson(models.Model):
     audio = models.FileField(upload_to='uploads/audio/%Y/%m/', null=True)
     english_audio = models.FileField(upload_to='uploads/audio/%Y/%m/', null=True)
     image = models.ImageField(upload_to='uploads/image/%Y/%m/', null=True)
+    delimiter = models.CharField(max_length=10, default='', blank=True)

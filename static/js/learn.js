@@ -42,15 +42,15 @@
   }
 
   function newPlay(sentence) {
-    setCharacters(sentence.split(""), '#main', getCharacterHtml);
+    setCharacters(sentence, '#main', getCharacterHtml);
     $('#startButton').removeAttr('disabled');
     $('#nextButton').attr('disabled', 'disabled');
     $('.character-container .glyphicon').addClass('hide');
   }
 
   function startPlay(sentence) {
-    setCharacters(sentence.split(""), '#main', getContainerHtml);
-    setCharacters(shuffle(sentence.split("")), '#sentence', getCharacterHtml);
+    setCharacters(sentence, '#main', getContainerHtml);
+    setCharacters(shuffle(sentence), '#sentence', getCharacterHtml);
     $('#startButton').attr('disabled', 'disabled');
 
     $('.character-container').droppable({
@@ -132,8 +132,7 @@
 
   $( document ).ready(function() {
     var index = 0;
-    var text = $("#originalText").text().replace(/^[,.;，。：]+|[,.;，。：]+$/g, '');
-    var sentences = text.split(/[,.;，。：]/);
+    var sentences = JSON.parse(text);
     $(".ready-button").on('click touchstart', function(event) {
       $(this).addClass('hide');
       $(".action-buttons").removeClass('hide');

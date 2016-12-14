@@ -1,5 +1,7 @@
-
+# ! encoding=utf8
 import pydub
+import re
+import json
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.http import HttpResponse
@@ -20,11 +22,29 @@ class LessonView(View):
             return None
         return name.rsplit('.', -1)[-1]
 
+    def split_word(self, sentence, delimiter):
+        if not delimiter:
+            return list(sentence)
+        return sentence.split()
+
+    def get_sentence(self, lesson):
+        trim_pattern = re.compile(ur'^[,.;，。：]+|[,.;，。：]+$', re.UNICODE)
+        split_pattern = re.compile(ur'[,.;，。：]', re.UNICODE)
+
+        plain_text = lesson.text
+        plain_text = ''.join(plain_text.splitlines())
+        plain_text = re.sub(trim_pattern, '', plain_text)
+        sentences = re.split(split_pattern, plain_text)
+        sentences = [self.split_word(sentence, lesson.delimiter)
+            for sentence in sentences if sentence]
+        return json.dumps(sentences)
+
     def get(self, request, lesson_id=None):
         lesson_id = lesson_id or 1
         lesson = Lesson.objects.get(id=lesson_id)
         context = {
             'lesson': lesson,
+            'plain_text': self.get_sentence(lesson),
             'audio_extension': self.get_extension(lesson.audio.name),
             'english_audio_extension':
                 self.get_extension(lesson.english_audio.name),
