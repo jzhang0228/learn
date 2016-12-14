@@ -18,14 +18,14 @@
 
   function getContainerHtml(character, index) {
     return '<div id="drop' + index + '" data-value="' + character + '" ' +
-        'class="col-md-1 col-sm-2 col-xs-2 character-container">' +
+        'class="character-container">' +
         '<span class="glyphicon glyphicon-check hide" aria-hidden="true"></span>' +
         '<span class="glyphicon glyphicon-remove hide" aria-hidden="true"></span>' +
       '</div>';
   }
 
   function getCharacterHtml(character, index) {
-    return '<div class="col-md-1 col-sm-2 col-xs-2 character-container">' +
+    return '<div class="character-container">' +
         '<div id="drag' + index + '" data-value="' + character + '" class="character">' +
           character +
         '</div>' +
@@ -101,6 +101,14 @@
       $('#checkButton').attr('disabled', 'disabled');
       $('#nextButton').removeAttr('disabled');
     }
+    increaseNumber(succeed);
+  }
+
+  function increaseNumber(succeed) {
+    var glyphiconClass = succeed ? 'check' : 'remove';
+    var selector = '.glyphicon-' + glyphiconClass + ' .check-result-number';
+    var currentValue = parseInt($(selector).text());
+    $(selector).html(currentValue + 1);
   }
 
   function getRandomColor() {
@@ -121,6 +129,21 @@
   }
 
   function showDoneMessage() {
+    var success = parseInt($('.glyphicon-check .check-result-number').text());
+    var fail = parseInt($('.glyphicon-remove .check-result-number').text());
+    var message;
+    if (fail === 0) {
+      showSuccessMessage();
+      return;
+    } else if (fail < success) {
+      message = 'You are almost there! Try again!'
+    } else {
+      message = 'You can do better next time!'
+    }
+    showTryAgainMessage(success, fail, message);
+  }
+
+  function showSuccessMessage() {
     const DURATION = 1000;
     $('#main').html('<h1 id="done">' + getPraise() + '!</h1>');
     $('#done').css('text-shadow', "5px 5px 15px " + getRandomColor());
@@ -130,12 +153,25 @@
     }, DURATION);
   }
 
+  function showTryAgainMessage(success, fail, message) {
+    const DURATION = 5000;
+    var html = '<h1 class="try-again">' +
+      '<div class="text-success">Succss: ' + success + '</div>' +
+      '<div class="text-danger">Fail: ' + fail + ' </div>' +
+      '<div>' + message + '</div>' +
+    '</h1>';
+    $('#main').html(html);
+    setTimeout(function() {
+      location.reload();
+    }, DURATION);
+  }
+
   $( document ).ready(function() {
     var index = 0;
     var sentences = JSON.parse(text);
     $(".ready-button").on('click touchstart', function(event) {
       $(this).addClass('hide');
-      $(".action-buttons").removeClass('hide');
+      $(".action-buttons, .check-result").removeClass('hide');
       newPlay(sentences[index]);
     });
 

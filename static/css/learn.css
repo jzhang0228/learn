@@ -32,18 +32,33 @@
 }
 
 .character-container {
+  position: relative;
   text-align: center;
-  height: 80px;
+  height: 90px;
   border: 1px solid #cccccc;
   padding-left: 0;
   padding-right: 0;
   background-color: rgba(255, 255, 0255, 0.7);
+  float: left;
+  min-width: 80px;
+  padding: 10px;
 }
 
 .character-container .glyphicon {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.check-result-number {
+    position: absolute;
+    top: -10px;
+    right: -5px;
+    font-size: 16px;
+}
+
+.check-result .glyphicon {
+  margin: 0 5px;
 }
 
 .character-container .glyphicon-check {
@@ -65,12 +80,22 @@
   cursor: move;
 }
 
+.check-result {
+  font-size: 1.5em;
+}
+
 .dash-border {
   border: 2px dashed green;
 }
 
 #done {
   font-size: 0px;
+  width: 100%;
+  text-align: center;
+}
+
+.try-again {
+  font-size: 20px;
   width: 100%;
   text-align: center;
 }
