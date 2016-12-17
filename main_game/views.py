@@ -23,9 +23,11 @@ class LessonView(View):
         return name.rsplit('.', -1)[-1]
 
     def split_word(self, sentence, delimiter):
-        if not delimiter:
-            return list(sentence)
-        return sentence.split()
+        sentence.strip()
+        if ' ' in sentence:
+            return sentence.split()
+        return list(sentence)
+
 
     def get_sentence(self, lesson):
         trim_pattern = re.compile(ur'^[,.;，。：]+|[,.;，。：]+$', re.UNICODE)
